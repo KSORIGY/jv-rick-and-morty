@@ -8,6 +8,5 @@ public record ExternalApiResponseDto(Info info, List<ExternalCharacterDto> resul
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record Info(String next) {
-
     }
 }

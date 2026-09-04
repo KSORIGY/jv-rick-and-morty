@@ -30,6 +30,14 @@ public class RickAndMortyClient {
 
             url = response.info() != null ? response.info().next() : null;
 
+            if (url != null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
         }
         return allCharactersFromApi;
     }
