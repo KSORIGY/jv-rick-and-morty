@@ -53,6 +53,10 @@ public class RickAndMortyClient {
                     httpRequest, HttpResponse.BodyHandlers.ofString()
             );
 
+            if (httpResponse.statusCode() >= 400) {
+                throw new RuntimeException("API error: " + httpResponse.statusCode());
+            }
+
             return objectMapper.readValue(httpResponse.body(), ExternalApiResponseDto.class);
         } catch (Exception e) {
             throw new RuntimeException("Can`t fetch characters from URL: " + url, e);

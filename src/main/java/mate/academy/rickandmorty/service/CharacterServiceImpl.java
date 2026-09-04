@@ -10,6 +10,7 @@ import mate.academy.rickandmorty.model.Character;
 import mate.academy.rickandmorty.repository.CharacterRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -43,7 +44,7 @@ public class CharacterServiceImpl implements CharacterService {
 
         int randomRowIndex = (int) (Math.random() * count);
 
-        PageRequest pageRequest = PageRequest.of(randomRowIndex, 1);
+        PageRequest pageRequest = PageRequest.of(randomRowIndex, 1, Sort.unsorted());
 
         Page<Character> characterFromPage = characterRepository.findAll(pageRequest);
 
