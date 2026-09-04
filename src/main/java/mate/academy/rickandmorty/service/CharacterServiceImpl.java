@@ -29,7 +29,7 @@ public class CharacterServiceImpl implements CharacterService {
 
             characterRepository.saveAll(characters);
         } catch (Exception e) {
-            throw new RuntimeException("Can`t get charaters! ", e);
+            throw new RuntimeException("Can`t get characters! ", e);
         }
     }
 
@@ -46,6 +46,10 @@ public class CharacterServiceImpl implements CharacterService {
         PageRequest pageRequest = PageRequest.of(randomRowIndex, 1);
 
         Page<Character> characterFromPage = characterRepository.findAll(pageRequest);
+
+        if (characterFromPage.getContent().isEmpty()) {
+            throw new RuntimeException("No characters found in the database!");
+        }
 
         Character character = characterFromPage.getContent().get(0);
 

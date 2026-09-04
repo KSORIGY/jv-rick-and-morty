@@ -7,23 +7,21 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import mate.academy.rickandmorty.dto.ExternalApiResponseDto;
 import mate.academy.rickandmorty.dto.ExternalCharacterDto;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class RickAndMortyClient {
-    private static final String FirstPageUrlInApi = "https://rickandmortyapi.com/api/character";
+    private static final String FIRST_PAGE_IN_API_URL = "https://rickandmortyapi.com/api/character";
 
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public List<ExternalCharacterDto> fetchCharacters() throws Exception {
+    public List<ExternalCharacterDto> fetchCharacters() {
         List<ExternalCharacterDto> allCharactersFromApi = new ArrayList<>();
 
-        String url = FirstPageUrlInApi;
+        String url = FIRST_PAGE_IN_API_URL;
 
         while (url != null) {
             ExternalApiResponseDto response = fetchPage(url);
@@ -31,6 +29,7 @@ public class RickAndMortyClient {
             allCharactersFromApi.addAll(response.results());
 
             url = response.info() != null ? response.info().next() : null;
+
         }
         return allCharactersFromApi;
     }
@@ -45,11 +44,6 @@ public class RickAndMortyClient {
             HttpResponse<String> httpResponse = httpClient.send(
                     httpRequest, HttpResponse.BodyHandlers.ofString()
             );
-
-            String body = httpResponse.body();
-            if (body != null && body.trim().startsWith("error")) {
-                return new ExternalApiResponseDto(null, List.of());
-            }
 
             return objectMapper.readValue(httpResponse.body(), ExternalApiResponseDto.class);
         } catch (Exception e) {

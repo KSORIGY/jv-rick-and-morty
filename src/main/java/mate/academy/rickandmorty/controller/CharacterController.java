@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Character management", description = "Ednpoints for managing characters")
+@Tag(name = "Character management", description = "Endpoints for managing characters")
 @RestController
 @RequestMapping("/api/characters")
 @RequiredArgsConstructor
