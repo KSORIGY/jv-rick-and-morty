@@ -2,20 +2,20 @@ package mate.academy.rickandmorty.service;
 
 import jakarta.annotation.PostConstruct;
 import java.util.List;
+import java.util.Random;
+
 import lombok.RequiredArgsConstructor;
 import mate.academy.rickandmorty.client.RickAndMortyClient;
 import mate.academy.rickandmorty.dto.CharacterResponseDto;
 import mate.academy.rickandmorty.mapper.CharacterMapper;
 import mate.academy.rickandmorty.model.Character;
 import mate.academy.rickandmorty.repository.CharacterRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class CharacterServiceImpl implements CharacterService {
+    private final Random random = new Random();
     private final RickAndMortyClient rickAndMortyClient;
     private final CharacterMapper characterMapper;
     private final CharacterRepository characterRepository;
@@ -38,21 +38,10 @@ public class CharacterServiceImpl implements CharacterService {
     public CharacterResponseDto getRandomCharacter() {
         long count = characterRepository.count();
 
-        if (count == 0) {
-            throw new RuntimeException("BD is empty!");
-        }
+        long randomId = random.nextLong(count) + 1;
 
-        int randomRowIndex = (int) (Math.random() * count);
-
-        PageRequest pageRequest = PageRequest.of(randomRowIndex, 1, Sort.unsorted());
-
-        Page<Character> characterFromPage = characterRepository.findAll(pageRequest);
-
-        if (characterFromPage.getContent().isEmpty()) {
-            throw new RuntimeException("No characters found in the database!");
-        }
-
-        Character character = characterFromPage.getContent().get(0);
+        Character character = characterRepository.findById(randomId)
+                .orElseThrow(() -> new RuntimeException("Character not found with id: " + randomId));
 
         return characterMapper.toDto(character);
     }
@@ -63,4 +52,5 @@ public class CharacterServiceImpl implements CharacterService {
                 .map(characterMapper::toDto)
                 .toList();
     }
+
 }
