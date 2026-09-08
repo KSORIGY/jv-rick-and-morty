@@ -3,7 +3,6 @@ package mate.academy.rickandmorty.service;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
 import java.util.Random;
-
 import lombok.RequiredArgsConstructor;
 import mate.academy.rickandmorty.client.RickAndMortyClient;
 import mate.academy.rickandmorty.dto.CharacterResponseDto;
@@ -41,7 +40,8 @@ public class CharacterServiceImpl implements CharacterService {
         long randomId = random.nextLong(count) + 1;
 
         Character character = characterRepository.findById(randomId)
-                .orElseThrow(() -> new RuntimeException("Character not found with id: " + randomId));
+                .orElseThrow(() -> new RuntimeException("Character not found with id: "
+                        + randomId));
 
         return characterMapper.toDto(character);
     }
